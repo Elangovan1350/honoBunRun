@@ -1,11 +1,11 @@
 import { Hono } from "hono";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../src/generated/prisma/client";
 
 const app = new Hono();
 const prisma = new PrismaClient();
 
 app.get("/", (c) => {
-  return c.text("Hello Hono!");
+  return c.text("Hello Hono! js");
 });
 
 app.get("/users", async (c) => {
