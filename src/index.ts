@@ -16,14 +16,14 @@ app.get("/users", async (c) => {
 app.get("/users/:id", async (c) => {
   const { id } = c.req.param();
   const users = await prisma.user.findUnique({
-    where: { id: Number(id) },
+    where: { id: id },
   });
   return c.json(users);
 });
 
 app.post("/users", async (c) => {
-  const data = await c.req.json();
-  const newUser = await prisma.user.create({ data });
+  const { name, email } = await c.req.json();
+  const newUser = await prisma.user.create({ data: { name, email } });
   return c.json(newUser, 201);
 });
 
