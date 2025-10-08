@@ -27,4 +27,10 @@ app.post("/users", async (c) => {
   return c.json(newUser, 201);
 });
 
+app.delete("/users/:id", async (c) => {
+  const { id } = c.req.param();
+  const deletedUser = await prisma.user.delete({ where: { id } });
+  return c.json(deletedUser);
+});
+
 export default app;
