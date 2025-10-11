@@ -15,7 +15,12 @@ const prisma = new PrismaClient({
     },
   },
 });
-console.log(process.env.NODE_ENV);
+console.log(
+  "Prisma is connecting to:",
+  process.env.NODE_ENV === "production"
+    ? process.env.TURSO_DATABASE_URL
+    : process.env.DATABASE_URL
+);
 
 app.get("/", (c) => {
   return c.text("Hello Hono! js");
