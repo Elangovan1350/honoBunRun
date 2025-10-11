@@ -1,26 +1,14 @@
 import { Hono } from "hono";
-import { PrismaClient } from "../src/generated/prisma/client";
-import { config } from "dotenv";
-
-config();
+import { PrismaClient } from "@prisma/client";
+import { PrismaLibSQL } from "@prisma/adapter-libsql";
 
 const app = new Hono();
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url:
-        process.env.NODE_ENV === "production"
-          ? process.env.TURSO_DATABASE_URL!
-          : process.env.DATABASE_URL!,
-    },
-  },
+
+const adapter = new PrismaLibSQL({
+  url: `${process.env.TURSO_DATABASE_URL}`,
+  authToken: `${process.env.TURSO_AUTH_TOKEN}`,
 });
-console.log(
-  "Prisma is connecting to:",
-  process.env.NODE_ENV === "production"
-    ? process.env.TURSO_DATABASE_URL
-    : process.env.DATABASE_URL
-);
+const prisma = new PrismaClient({ adapter });
 
 app.get("/", (c) => {
   return c.text("Hello Hono! js");
