@@ -1,8 +1,20 @@
 import { Hono } from "hono";
 import { PrismaClient } from "../src/generated/prisma/client";
+import { config } from "dotenv";
+
+config();
 
 const app = new Hono();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url:
+        process.env.NODE_ENV === "production"
+          ? process.env.TURSO_DATABASE_URL!
+          : process.env.DATABASE_URL!,
+    },
+  },
+});
 
 app.get("/", (c) => {
   return c.text("Hello Hono! js");
